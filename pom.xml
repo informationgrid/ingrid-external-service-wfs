@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>de.ingrid</groupId>
+        <artifactId>ingrid-base-pom</artifactId>
+        <version>3.5.0-SNAPSHOT-R304</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ingrid-external-service-wfs</artifactId>
+    <packaging>jar</packaging>
+    <version>3.5.0-SNAPSHOT</version>
+    <name>ingrid-external-service-wfs</name>
+    <scm>
+        <connection>scm:svn:https://harrison.its-technidata.de:444/svn/ingrid/ingrid-external-service-wfs/trunk</connection>
+        <developerConnection>scm:svn:https://harrison.its-technidata.de:444/svn/ingrid/ingrid-external-service-wfs/trunk</developerConnection>
+    </scm>
+    <properties>
+        <geotools.version>12.1</geotools.version>
+        <geotk.version>4.0-M2</geotk.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>de.ingrid</groupId>
+            <artifactId>ingrid-external-services-api</artifactId>
+        </dependency>
+        <!-- <dependency> <groupId>org.geotools</groupId> <artifactId>gt-wfs</artifactId> <version>${geotools.version}</version> 
+            </dependency> -->
+        <dependency>
+            <groupId>org.geotoolkit</groupId>
+            <artifactId>geotk-client-wfs</artifactId>
+            <version>${geotk.version}</version>
+        </dependency>
+        <!-- <dependency> <groupId>org.geotoolkit</groupId> <artifactId>geotk-logging-log4j</artifactId> <version>${geotk.version}</version> 
+            <scope>runtime</scope> </dependency> -->
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+        </dependency>
+    </dependencies>
+    <repositories>
+        <repository>
+            <id>de.ingrid.all</id>
+            <name>Maven Repo InGrid</name>
+            <url>http://harrison.its-technidata.de/archiva/repository/ingrid-all</url>
+        </repository>
+        <!-- <repository> <id>GEOTOOLS</id> <name>Geotools Repository</name> <url>http://download.osgeo.org/webdav/geotools/</url> 
+            </repository> -->
+        <repository>
+            <!-- Not needed for "*-geoapi-3.0" versions -->
+            <id>geotoolkit</id>
+            <name>Geotk repository</name>
+            <url>http://maven.geotoolkit.org</url>
+        </repository>
+    </repositories>
+</project>
