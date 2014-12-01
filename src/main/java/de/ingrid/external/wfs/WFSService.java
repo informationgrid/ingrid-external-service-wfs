@@ -23,12 +23,12 @@ public class WFSService implements GazetteerService {
         String[] types = wfsProps.getString( "objectTypes" ).split( "," );
         String[] properties = wfsProps.getString( "properties" ).split( "," );
         wfsClient = new WFSClient( url, properties, types );
-        wfsMapper = new WFSMapper();
+        wfsMapper = new WFSMapper( wfsProps );
     }
 
     @Override
     public Location[] findLocationsFromQueryTerm(String term, QueryType typeOfQuery, MatchingType matching, Locale locale) {
-        InputStream response = wfsClient.findLocation(term, locale);
+        InputStream response = wfsClient.findLocation(term, matching, locale);
         Location[] locations = wfsMapper.mapReponseToLocations( response );
         return locations;
     }
@@ -43,13 +43,13 @@ public class WFSService implements GazetteerService {
     @Override
     public Location[] getLocationsFromText(String text, int analyzeMaxWords, boolean ignoreCase, Locale locale) {
         log.warn( "This function is not supported! -> getLocationsFromText(...)" );
-        return null;
+        return new Location[0];
     }
 
     @Override
     public Location[] getRelatedLocationsFromLocation(String locationId, boolean includeFrom, Locale locale) {
         log.warn( "This function is not supported! -> getRelatedLocationsFromLocation(...)" );
-        return null;
+        return new Location[0];
     }
 
 }

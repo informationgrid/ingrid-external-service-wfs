@@ -5,16 +5,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 
+import org.apache.log4j.Logger;
+import org.apache.xerces.dom.ElementNSImpl;
 import org.geotoolkit.gml.xml.v311.FeaturePropertyType;
 import org.geotoolkit.wfs.xml.WFSMarshallerPool;
 import org.geotoolkit.wfs.xml.v110.FeatureCollectionType;
 import org.w3c.dom.NodeList;
-
-import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 
 import de.ingrid.external.om.Location;
 import de.ingrid.external.om.impl.LocationImpl;
@@ -26,10 +28,13 @@ import de.ingrid.external.om.impl.LocationImpl;
  */
 public class WFSMapper {
     
-//    private XPath xpath;
+    private Logger log = Logger.getLogger( WFSMapper.class ); 
+    
+    private ResourceBundle bundle;
 
-    public WFSMapper() {
-//        this.xpath = XPathFactory.newInstance().newXPath();
+
+    public WFSMapper(ResourceBundle wfsProps) {
+        this.bundle = wfsProps;
     }
 
     /**
@@ -40,7 +45,7 @@ public class WFSMapper {
     @SuppressWarnings("unchecked")
     public Location[] mapReponseToLocations(InputStream response) {
         List<Location> locations = new ArrayList<Location>();
-        Map<String,String> typeMap = new HashMap<String, String>();
+        Map<String,String[]> typeMap = new HashMap<String, String[]>();
         try {
             Object unmarshal = WFSMarshallerPool.getInstance().acquireUnmarshaller().unmarshal( response );
 
@@ -58,22 +63,20 @@ public class WFSMapper {
                 // NOT SUPPORTED: loc.setIsExpired( arg0 );
                 loc.setNativeKey( getNativeKeyFromFeature( f ) );
 //                loc.setQualifier( arg0 );
-                loc.setTypeId( getTypeIdFromFeature( f ) );
-                loc.setTypeName( getTypeNameFromFeature( f ) );
-                
-                if (loc.getTypeName() != null) {
-                    typeMap.put( loc.getTypeId(), loc.getTypeName() );
-                }
+                // get the type name from the ID through localization instead of possible value in document
+                setTypeFromFeature( loc, f, typeMap );
                 
                 locations.add( loc );
             }
             
             // check for typeIds that are references and resolve those correctly
             for (Location l : locations) {
-                if (l.getTypeId() != null && l.getTypeId().startsWith( "#" )) {
-                    String id = l.getTypeId().substring( 1 );
-                    l.setTypeId( id );
-                    l.setTypeName( typeMap.get( id ) );
+                String id = l.getTypeId(); 
+                if (id != null && id.startsWith( "#" )) {
+                    // remove reference char '#' to look in map for
+                    String[] typeInfo = typeMap.get( id.substring( 1 ) );
+                    l.setTypeId( typeInfo[0] );
+                    l.setTypeName( typeInfo[1] );
                 }
             }
             
@@ -110,9 +113,57 @@ public class WFSMapper {
         
         return box;
     }
+    
+    /**
+     * Extract the ID from the document and try to determine the type name. First
+     * use the localization through ResourceBundle and otherwise the value inside
+     * the document.
+     * @param loc is the object where the type id and name shall be added to
+     * @param f is the document fragment representing the location
+     * @param typeMap is a Map to store references to types
+     */
+    private void setTypeFromFeature( Location loc, ElementNSImpl f, Map<String, String[]> typeMap ) {
+        NodeList types = f.getElementsByTagName( "gn:Objektart" );
+        ElementNSImpl item = (ElementNSImpl) types.item( 0 );
+        
+        String tId = null,
+                tName = null;
+        
+        // get the type ID first
+        if (item != null) {
+            // 
+            NodeList key = item.getElementsByTagName( "gn:schluessel" );
+            tId = key.item( 0 ).getTextContent();
+            
+        } else {
+            // try to find out if it has a reference to an already defined type
+            NodeList hasTypes = f.getElementsByTagName( "gn:hatObjektart" );
+            ElementNSImpl hasItem = (ElementNSImpl) hasTypes.item( 0 );
+            String link = hasItem.getAttribute( "xlink:href" );
+            if (link != null) {
+                tId = link;
+            }
+        }
+        loc.setTypeId( tId );
+        
+        
+        // get now the type name if it's not a reference (will be handled later with!)
+        if (tId != null && !tId.startsWith( "#" )) {
+            try {
+                tName = bundle.getString( "gazetteer.de." + tId );
+            } catch (MissingResourceException e) {
+                log.warn( "Type name of location not found in ResourceBundle ... id=" + tId );
+                tName = getTypeNameFromFeature( item );
+            }
+            String[] typeInfo = new String[] { tId, tName };
+            typeMap.put( item.getAttribute( "gml:id" ), typeInfo );
+            loc.setTypeName( tName );
+        }
+    }
 
     /**
-     * Get the name of the type of the location from a search result.
+     * Get the name of the type of the location from a search result. The name
+     * will be translated according to the used resource bundle.
      * @param f
      * @return the type name
      */
@@ -121,34 +172,15 @@ public class WFSMapper {
         // TODO: check if it exists and try to look for "gn:wert" otherwise
         ElementNSImpl item = (ElementNSImpl) types.item( 0 );
         if (item != null) {
-            return item.getTextContent();
-        }
-        return null;
-    }
-
-    /**
-     * Get the id of the type of the location from a search result.
-     * @param f
-     * @return the type id
-     */
-    private String getTypeIdFromFeature(ElementNSImpl f) {
-        NodeList types = f.getElementsByTagName( "gn:Objektart" );
-        ElementNSImpl item = (ElementNSImpl) types.item( 0 );
-        if (item != null) {
-            return item.getAttribute( "gml:id" );
-            
-        } else {
-            // try to find out if it has a reference to an already defined type
-            NodeList hasTypes = f.getElementsByTagName( "gn:hatObjektart" );
-            ElementNSImpl hasItem = (ElementNSImpl) hasTypes.item( 0 );
-            String link = hasItem.getAttribute( "xlink:href" );
-            if (link != null) {
-                return link;
+            try {
+                return bundle.getString( "gazetteer.de." + item.getTextContent() );
+            } catch (MissingResourceException e) {
+                return item.getTextContent();
             }
         }
         return null;
     }
-
+    
     /**
      * Get the native key (AGS) of the location from a search result.
      * @param f

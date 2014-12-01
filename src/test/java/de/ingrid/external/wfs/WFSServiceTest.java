@@ -8,6 +8,7 @@ import static org.hamcrest.core.IsNull.nullValue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.ingrid.external.GazetteerService.MatchingType;
 import de.ingrid.external.om.Location;
 
 public class WFSServiceTest {
@@ -40,6 +41,16 @@ public class WFSServiceTest {
             
         }
         
+        result = service.findLocationsFromQueryTerm( "Berlin", null, MatchingType.BEGINS_WITH, null );
+        assertThat( result, is( not( nullValue() ) ));
+        assertThat( result.length, is( 5 ));
+        result = service.findLocationsFromQueryTerm( "Berlin", null, MatchingType.CONTAINS, null );
+        assertThat( result, is( not( nullValue() ) ));
+        assertThat( result.length, is( 9 ));
+        result = service.findLocationsFromQueryTerm( "Berlin", null, MatchingType.EXACT, null );
+        assertThat( result, is( not( nullValue() ) ));
+        assertThat( result.length, is( 3 ));
+        
     }
     
     @Test
@@ -50,8 +61,8 @@ public class WFSServiceTest {
         assertThat( location.getId(), is( "DEBKGGND00001GFQ" ) );
         assertThat( location.getName(), is( "Berlin" ) );
         assertThat( location.getNativeKey(), is( "11000000" ) );
-        assertThat( location.getTypeId(), is( "Obj_1666" ) );
-        assertThat( location.getTypeName(), is( "AX_Bundesland" ) );
+        assertThat( location.getTypeId(), is( "73002" ) );
+        assertThat( location.getTypeName(), is( "Bundesland" ) );
     }
     
 
