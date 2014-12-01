@@ -16,7 +16,6 @@
         <developerConnection>scm:svn:https://harrison.its-technidata.de:444/svn/ingrid/ingrid-external-service-wfs/trunk</developerConnection>
     </scm>
     <properties>
-        <geotools.version>12.1</geotools.version>
         <geotk.version>4.0-M2</geotk.version>
     </properties>
     <dependencies>
@@ -24,15 +23,11 @@
             <groupId>de.ingrid</groupId>
             <artifactId>ingrid-external-services-api</artifactId>
         </dependency>
-        <!-- <dependency> <groupId>org.geotools</groupId> <artifactId>gt-wfs</artifactId> <version>${geotools.version}</version> 
-            </dependency> -->
         <dependency>
             <groupId>org.geotoolkit</groupId>
             <artifactId>geotk-client-wfs</artifactId>
             <version>${geotk.version}</version>
         </dependency>
-        <!-- <dependency> <groupId>org.geotoolkit</groupId> <artifactId>geotk-logging-log4j</artifactId> <version>${geotk.version}</version> 
-            <scope>runtime</scope> </dependency> -->
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
@@ -62,8 +57,6 @@
             <name>Maven Repo InGrid</name>
             <url>http://harrison.its-technidata.de/archiva/repository/ingrid-all</url>
         </repository>
-        <!-- <repository> <id>GEOTOOLS</id> <name>Geotools Repository</name> <url>http://download.osgeo.org/webdav/geotools/</url> 
-            </repository> -->
         <repository>
             <!-- Not needed for "*-geoapi-3.0" versions -->
             <id>geotoolkit</id>
