@@ -10,7 +10,7 @@
     <artifactId>ingrid-external-service-wfs</artifactId>
     <packaging>jar</packaging>
     <version>3.5.0-SNAPSHOT</version>
-    <name>ingrid-external-service-wfs</name>
+    <name>InGrid external-service-wfs</name>
     <scm>
         <connection>scm:svn:https://harrison.its-technidata.de:444/svn/ingrid/ingrid-external-service-wfs/trunk</connection>
         <developerConnection>scm:svn:https://harrison.its-technidata.de:444/svn/ingrid/ingrid-external-service-wfs/trunk</developerConnection>
