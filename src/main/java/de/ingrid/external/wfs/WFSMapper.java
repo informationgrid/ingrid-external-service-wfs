@@ -149,13 +149,19 @@ public class WFSMapper {
         ElementNSImpl item = (ElementNSImpl) types.item( 0 );
         
         String tId = null,
+                realTypeId = null,
                 tName = null;
         
         // get the type ID first
         if (item != null) {
             // 
             NodeList key = item.getElementsByTagName( "gn:schluessel" );
-            tId = key.item( 0 ).getTextContent();
+            realTypeId = key.item( 0 ).getTextContent();
+            try {
+                tId = bundle.getString( "map.id.key." + realTypeId );
+            } catch (MissingResourceException e) {
+                tId = realTypeId;
+            }
             
         } else {
             // try to find out if it has a reference to an already defined type
@@ -172,9 +178,9 @@ public class WFSMapper {
         // get now the type name if it's not a reference (will be handled later with!)
         if (tId != null && !tId.startsWith( "#" )) {
             try {
-                tName = bundle.getString( "gazetteer.de." + tId );
+                tName = bundle.getString( "gazetteer.de." + realTypeId );
             } catch (MissingResourceException e) {
-                log.warn( "Type name of location not found in ResourceBundle ... id=" + tId );
+                log.warn( "Type name of location not found in ResourceBundle ... id=" + realTypeId );
                 tName = getTypeNameFromFeature( item );
             }
             String[] typeInfo = new String[] { tId, tName };
