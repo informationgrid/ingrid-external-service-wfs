@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <groupId>de.ingrid</groupId>
         <artifactId>ingrid-base-pom</artifactId>
@@ -9,12 +8,13 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ingrid-external-service-wfs</artifactId>
     <packaging>jar</packaging>
-    <version>3.5.0-SNAPSHOT</version>
+    <version>3.5.0</version>
     <name>InGrid external-service-wfs</name>
     <scm>
         <connection>scm:git:git@github.com:informationgrid/ingrid-external-service-wfs.git</connection>
         <developerConnection>scm:git:git@github.com:informationgrid/ingrid-external-service-wfs.git</developerConnection>
-    </scm>
+      <tag>ingrid-external-service-wfs-3.5.0</tag>
+  </scm>
     <properties>
         <geotk.version>4.0-M2</geotk.version>
     </properties>
