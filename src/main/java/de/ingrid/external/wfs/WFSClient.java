@@ -112,8 +112,10 @@ public class WFSClient {
         } else if (matching == null || matching == MatchingType.CONTAINS) {
             query = "*" + term + "*";
         }
+        
         // setup Filter
         PropertyIsLikeType termFilter = new PropertyIsLikeType( PROPERTY_NAME, query, wildcard, singleChar, escapeChar );
+        termFilter = new PropertyIsLikeType( termFilter.getExpression(), query, wildcard, singleChar, escapeChar, false );
 
         // add filter for requested object types
         List<Object> filter = new ArrayList<Object>();
