@@ -24,6 +24,8 @@ package de.ingrid.external.wfs;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 
@@ -52,7 +54,7 @@ public class WFSServiceTest {
         Location[] result = service.findLocationsFromQueryTerm( "Berlin", null, null, null );
         
         assertThat( result, is( not( nullValue() ) ));
-        assertThat( result.length, is( 11 ));
+        assertThat( result.length, greaterThan( 10 ));
         for (Location location : result) {
             assertThat( location.getBoundingBox(), is( not( nullValue() ) ) );
             assertThat( location.getId(), is( not( nullValue() ) ) );
@@ -65,13 +67,13 @@ public class WFSServiceTest {
         
         result = service.findLocationsFromQueryTerm( "Berlin", null, MatchingType.BEGINS_WITH, null );
         assertThat( result, is( not( nullValue() ) ));
-        assertThat( result.length, is( 7 ));
+        assertThat( result.length, greaterThan( 6 ));
         result = service.findLocationsFromQueryTerm( "Berlin", null, MatchingType.CONTAINS, null );
         assertThat( result, is( not( nullValue() ) ));
-        assertThat( result.length, is( 11 ));
+        assertThat( result.length, greaterThan( 10 ));
         result = service.findLocationsFromQueryTerm( "Berlin", null, MatchingType.EXACT, null );
         assertThat( result, is( not( nullValue() ) ));
-        assertThat( result.length, is( 3 ));
+        assertThat( result.length, greaterThan( 2 ));
         
     }
     
@@ -79,7 +81,10 @@ public class WFSServiceTest {
     public void getLocation() {
         Location location = service.getLocation( "DEBKGGND00001GFQ", null ); // Berlin (Bundesland)
         assertThat( location, is( not( nullValue() ) ));
-        assertThat( location.getBoundingBox(), is( new float[] { 13.0883332179289f, 52.3382418357021f, 13.760469283944f, 52.6749171494323f } ) );
+        assertThat( String.valueOf( location.getBoundingBox()[0] ), startsWith( "13.0" ) );
+        assertThat( String.valueOf( location.getBoundingBox()[1] ), startsWith( "52.3" ) );
+        assertThat( String.valueOf( location.getBoundingBox()[2] ), startsWith( "13.7" ) );
+        assertThat( String.valueOf( location.getBoundingBox()[3] ), startsWith( "52.6" ) );
         assertThat( location.getId(), is( "DEBKGGND00001GFQ" ) );
         assertThat( location.getName(), is( "Berlin" ) );
         assertThat( location.getNativeKey(), is( "11000000" ) );
