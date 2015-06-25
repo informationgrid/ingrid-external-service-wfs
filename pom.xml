@@ -8,12 +8,12 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>ingrid-external-service-wfs</artifactId>
   <packaging>jar</packaging>
-  <version>3.6.0.1-SNAPSHOT</version>
+  <version>3.6.0.1</version>
   <name>InGrid external-service-wfs</name>
   <scm>
     <connection>scm:git:git@github.com:informationgrid/ingrid-external-service-wfs.git</connection>
     <developerConnection>scm:git:git@github.com:informationgrid/ingrid-external-service-wfs.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>ingrid-external-service-wfs-3.6.0.1</tag>
   </scm>
   <properties>
     <geotk.version>4.0-M2</geotk.version>
