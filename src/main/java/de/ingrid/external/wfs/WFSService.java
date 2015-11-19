@@ -64,8 +64,8 @@ public class WFSService implements GazetteerService {
 
     @Override
     public Location[] getLocationsFromText(String text, int analyzeMaxWords, boolean ignoreCase, Locale locale) {
-        log.warn( "This function is not supported! -> getLocationsFromText(...)" );
-        return new Location[0];
+        log.warn( "This function is not supported! -> getLocationsFromText(...) -> using findLocationsFromQueryTerm instead" );
+        return findLocationsFromQueryTerm( text, QueryType.ALL_LOCATIONS, MatchingType.CONTAINS, locale );
     }
 
     @Override
