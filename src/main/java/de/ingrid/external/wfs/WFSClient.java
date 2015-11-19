@@ -112,8 +112,10 @@ public class WFSClient {
         } else if (matching == null || matching == MatchingType.CONTAINS) {
             query = "*" + term + "*";
         }
+        
         // setup Filter
         PropertyIsLikeType termFilter = new PropertyIsLikeType( PROPERTY_NAME, query, wildcard, singleChar, escapeChar );
+        termFilter = new PropertyIsLikeType( termFilter.getExpression(), query, wildcard, singleChar, escapeChar, false );
 
         // add filter for requested object types
         List<Object> filter = new ArrayList<Object>();
@@ -155,6 +157,9 @@ public class WFSClient {
         marshaller.marshal( gft, filterWriter );
         pm.setRequestEntity( new StringRequestEntity( filterWriter.toString(), "application/xml", "UTF8" ) );
         HttpClient client = new HttpClient();
+        if (System.getProperty("http.proxyHost") != null && System.getProperty("http.proxyPort") != null) {
+            client.getHostConfiguration().setProxy(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort")));
+        }
         client.executeMethod( pm );
         return pm.getResponseBodyAsStream();
     }
