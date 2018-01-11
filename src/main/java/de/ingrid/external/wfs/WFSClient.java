@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -38,6 +37,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.log4j.Logger;
 import org.geotoolkit.ogc.xml.v110.AndType;
 import org.geotoolkit.ogc.xml.v110.FilterType;
 import org.geotoolkit.ogc.xml.v110.LiteralType;
@@ -53,10 +53,12 @@ import org.geotoolkit.wfs.xml.v110.QueryType;
 import de.ingrid.external.GazetteerService.MatchingType;
 
 public class WFSClient {
+    
+    private Logger log = Logger.getLogger( WFSClient.class );
 
-    private static final String PROPERTY_ID = "gn:GnObjekt/gn:nnid";
-    private static final String PROPERTY_NAME = "gn:GnObjekt/gn:hatEndonym/gn:Endonym/gn:name";
-    private static final String PROPERTY_OBJECT_TYPE = "gn:GnObjekt/gn:hatObjektart/gn:Objektart/gn:objektart";
+    private static final String PROPERTY_ID = "gn:nnid";
+    private static final String PROPERTY_NAME = "gn:hatEndonym/gn:Endonym/gn:name";
+    private static final String PROPERTY_OBJECT_TYPE = "gn:hatObjektart/gn:Objektart/gn:objektart";
 
     // the URL to the service
     private String url;
@@ -73,7 +75,7 @@ public class WFSClient {
 
     public WFSClient(String wfsUrl, String[] properties, String[] types) throws JAXBException {
         this.url = wfsUrl;
-        this.properties = Arrays.asList( properties ); // convertPropertiesToNames(
+        this.properties = new ArrayList<String>(); // Arrays.asList( properties ); // convertPropertiesToNames(
                                                        // properties );
         this.types = types;
         this.marshaller = WFSMarshallerPool.getInstance().acquireMarshaller();
@@ -92,12 +94,12 @@ public class WFSClient {
         List<QueryType> qTypes = new ArrayList<QueryType>();
         qTypes.add( qType );
 
-        GetFeatureType gft = new GetFeatureType( "WFS", "1.1.0", null, null, qTypes, ResultTypeType.RESULTS, null );
+        GetFeatureType gft = new GetFeatureType( "WFS", "1.1.0", null, null, qTypes, ResultTypeType.RESULTS, null, "*", null );
 
         try {
             return sendRequest( gft );
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error( "Error getting location from WFS Service", e );
         }
 
         return null;
@@ -139,12 +141,12 @@ public class WFSClient {
         List<QueryType> qTypes = new ArrayList<QueryType>();
         qTypes.add( qType );
 
-        GetFeatureType gft = new GetFeatureType( "WFS", "1.1.0", null, null, qTypes, ResultTypeType.RESULTS, null );
+        GetFeatureType gft = new GetFeatureType( "WFS", "1.1.0", null, null, qTypes, ResultTypeType.RESULTS, null, "*", null );
 
         try {
             return sendRequest( gft );
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error( "Error searching location in WFS Service", e );
         }
 
         return null;

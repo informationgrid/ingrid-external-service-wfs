@@ -87,7 +87,7 @@ public class WFSServiceTest {
         assertThat( String.valueOf( location.getBoundingBox()[3] ), startsWith( "52.6" ) );
         assertThat( location.getId(), is( "DEBKGGND00001GFQ" ) );
         assertThat( location.getName(), is( "Berlin" ) );
-        assertThat( location.getNativeKey(), is( "11000000" ) );
+        assertThat( location.getNativeKey(), is( nullValue() ) );
         assertThat( location.getTypeId(), is( "use2Type" ) );
         assertThat( location.getTypeName(), is( "Bundesland" ) );
     }
