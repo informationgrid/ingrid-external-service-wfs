@@ -2,7 +2,7 @@
  * **************************************************-
  * InGrid external-service-wfs
  * ==================================================
- * Copyright (C) 2014 - 2015 wemove digital solutions GmbH
+ * Copyright (C) 2014 - 2018 wemove digital solutions GmbH
  * ==================================================
  * Licensed under the EUPL, Version 1.1 or – as soon they will be
  * approved by the European Commission - subsequent versions of the
@@ -105,7 +105,7 @@ public class WFSMapper {
             return locations.toArray( new LocationImpl[0] );
             
         } catch (JAXBException e) {
-            e.printStackTrace();
+            log.error( "Error mapping response to location.", e );
         }
 
         return null;
@@ -124,6 +124,20 @@ public class WFSMapper {
      */
     private float[] getBBoxFromFeature(ElementNSImpl f) {
         NodeList coords = f.getElementsByTagName( "gml:pos" );
+        
+        float[] box = null;
+        
+        if (coords.item( 0 ) != null) {
+            box = getBBoxFromPosElement( coords );
+        } else {
+            coords = f.getElementsByTagName( "gml:posList" );
+            box = getBBoxFromPosListElement( coords );
+        }
+        
+        return box;
+    }
+    
+    private float[] getBBoxFromPosElement(NodeList coords) {
         String[] coord1 = coords.item( 0 ).getTextContent().split( " " );
         String[] coord2 = coords.item( 1 ).getTextContent().split( " " );
         
@@ -132,6 +146,32 @@ public class WFSMapper {
         box[1] = Float.valueOf( coord1[1] );
         box[2] = Float.valueOf( coord2[0] );
         box[3] = Float.valueOf( coord2[1] );
+        
+        return box;
+    }
+    
+    private float[] getBBoxFromPosListElement(NodeList coords) {
+        String[] coordsSplitted = coords.item( 0 ).getTextContent().split( " " );
+        
+        float[] box = new float[4];
+      
+        // determine bounding box from polygon by getting min/max values
+        for (int pos=0; pos < coordsSplitted.length; pos+=2) {
+            
+            if (box[1] == 0.0f || box[0] > Float.valueOf( coordsSplitted[pos] )) {
+                box[1] = Float.valueOf( coordsSplitted[pos] );
+            }
+            if (box[0] == 0.0f || box[1] > Float.valueOf( coordsSplitted[pos+1] )) {
+                box[0] = Float.valueOf( coordsSplitted[pos+1] );
+            }
+            
+            if (box[3] < Float.valueOf( coordsSplitted[pos] )) {
+                box[3] = Float.valueOf( coordsSplitted[pos] );
+            }
+            if (box[2] < Float.valueOf( coordsSplitted[pos+1] )) {
+                box[2] = Float.valueOf( coordsSplitted[pos+1] );
+            }
+        }
         
         return box;
     }
