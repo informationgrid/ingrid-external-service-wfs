@@ -3,12 +3,12 @@
   <parent>
     <groupId>de.ingrid</groupId>
     <artifactId>ingrid-base-pom</artifactId>
-    <version>4.1.0</version>
+    <version>4.2.1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>ingrid-external-service-wfs</artifactId>
   <packaging>jar</packaging>
-  <version>4.2.1-SNAPSHOT</version>
+  <version>3.6.1.1</version>
   <name>InGrid external-service-wfs</name>
   <scm>
     <connection>scm:git:git@github.com:informationgrid/ingrid-external-service-wfs.git</connection>
@@ -16,13 +16,13 @@
     <tag>HEAD</tag>
   </scm>
   <properties>
-    <geotk.version>4.0-M5</geotk.version>
+    <geotk.version>4.0-M2</geotk.version>
   </properties>
   <dependencies>
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-external-services-api</artifactId>
-      <version>4.0.3</version>
+      <version>3.5.0</version>
     </dependency>
     <dependency>
       <groupId>org.geotoolkit</groupId>
@@ -70,9 +70,9 @@
   </build>
   <repositories>
     <repository>
-      <id>de.ingrid.all</id>
-      <name>Maven Repo InGrid</name>
-      <url>https://dev.informationgrid.eu/archiva/repository/ingrid-all</url>
+      <id>nexus</id>
+      <name>Nexus Repo</name>
+      <url>https://nexus.informationgrid.eu/repository/maven-public</url>
     </repository>
     <repository>
       <!-- Not needed for "*-geoapi-3.0" versions -->
