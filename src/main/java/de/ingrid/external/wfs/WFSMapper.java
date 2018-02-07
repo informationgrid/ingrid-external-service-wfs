@@ -30,14 +30,14 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
-import org.apache.xerces.dom.ElementNSImpl;
 import org.geotoolkit.gml.xml.v311.FeaturePropertyType;
-import org.geotoolkit.wfs.xml.WFSMarshallerPool;
 import org.geotoolkit.wfs.xml.v110.FeatureCollectionType;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import de.ingrid.external.om.Location;
@@ -69,15 +69,21 @@ public class WFSMapper {
         List<Location> locations = new ArrayList<Location>();
         Map<String,String[]> typeMap = new HashMap<String, String[]>();
         try {
-            Object unmarshal = WFSMarshallerPool.getInstance().acquireUnmarshaller().unmarshal( response );
+            
+            JAXBContext context = JAXBContext.newInstance(FeatureCollectionType.class);
+            Unmarshaller um = context.createUnmarshaller();
+            FeatureCollectionType value = (FeatureCollectionType)um.unmarshal(response);
+            
+/*            Object unmarshal = WFSMarshallerPool.getInstance().acquireUnmarshaller().unmarshal( response );
 
             JAXBElement<FeatureCollectionType> fc = (JAXBElement<FeatureCollectionType>) unmarshal;
             FeatureCollectionType value = fc.getValue();
+*/
 
             List<FeaturePropertyType> featureMember = value.getFeatureMember();
             for (FeaturePropertyType member : featureMember) {
                 Location loc = new LocationImpl();
-                ElementNSImpl f = (ElementNSImpl) member.getUnknowFeature();
+                Element f = (Element) member.getUnknowFeature();
                 loc.setId( getIdFromFeature( f ) );
                 loc.setName( getNameFromFeature( f ) );
                 float[] bbox = getBBoxFromFeature( f );
@@ -122,7 +128,7 @@ public class WFSMapper {
      * @param f is the feature node in the document
      * @return an array of four floats representing the bounding box
      */
-    private float[] getBBoxFromFeature(ElementNSImpl f) {
+    private float[] getBBoxFromFeature(Element f) {
         NodeList coords = f.getElementsByTagName( "gml:pos" );
         
         float[] box = null;
@@ -184,9 +190,9 @@ public class WFSMapper {
      * @param f is the document fragment representing the location
      * @param typeMap is a Map to store references to types
      */
-    private void setTypeFromFeature( Location loc, ElementNSImpl f, Map<String, String[]> typeMap ) {
+    private void setTypeFromFeature( Location loc, Element f, Map<String, String[]> typeMap ) {
         NodeList types = f.getElementsByTagName( "gn:Objektart" );
-        ElementNSImpl item = (ElementNSImpl) types.item( 0 );
+        Element item = (Element) types.item( 0 );
         
         String tId = null,
                 realTypeId = null,
@@ -206,7 +212,7 @@ public class WFSMapper {
         } else {
             // try to find out if it has a reference to an already defined type
             NodeList hasTypes = f.getElementsByTagName( "gn:hatObjektart" );
-            ElementNSImpl hasItem = (ElementNSImpl) hasTypes.item( 0 );
+            Element hasItem = (Element) hasTypes.item( 0 );
             String link = hasItem.getAttribute( "xlink:href" );
             if (link != null) {
                 tId = link;
@@ -235,10 +241,10 @@ public class WFSMapper {
      * @param f
      * @return the type name
      */
-    private String getTypeNameFromFeature(ElementNSImpl f) {
+    private String getTypeNameFromFeature(Element f) {
         NodeList types = f.getElementsByTagName( "gn:objektart" );
         // TODO: check if it exists and try to look for "gn:wert" otherwise
-        ElementNSImpl item = (ElementNSImpl) types.item( 0 );
+        Element item = (Element) types.item( 0 );
         if (item != null) {
             try {
                 return bundle.getString( "gazetteer.de." + item.getTextContent() );
@@ -254,7 +260,7 @@ public class WFSMapper {
      * @param f
      * @return the key
      */
-    private String getNativeKeyFromFeature(ElementNSImpl f) {
+    private String getNativeKeyFromFeature(Element f) {
         // TODO: add switch for RS-key configured by property
         NodeList ags = f.getElementsByTagName( "gn:ags" );
         if (ags.getLength() > 0) {
@@ -268,7 +274,7 @@ public class WFSMapper {
      * @param f
      * @return the ID
      */
-    private String getIdFromFeature(ElementNSImpl f) {
+    private String getIdFromFeature(Element f) {
         return f.getElementsByTagName( "gn:nnid" ).item( 0 ).getTextContent();
     }
 
@@ -277,11 +283,11 @@ public class WFSMapper {
      * @param f
      * @return the name
      */
-    private String getNameFromFeature(ElementNSImpl f) {
+    private String getNameFromFeature(Element f) {
         NodeList endonyms = f.getElementsByTagName( "gn:Endonym" );
         
         // TODO: check for language!
-        ElementNSImpl item = (ElementNSImpl) endonyms.item( 0 );
+        Element item = (Element) endonyms.item( 0 );
         return item.getElementsByTagName( "gn:name" ).item( 0 ).getTextContent();
         
     }
