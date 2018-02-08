@@ -73,12 +73,6 @@ public class WFSMapper {
             JAXBContext context = JAXBContext.newInstance(FeatureCollectionType.class);
             Unmarshaller um = context.createUnmarshaller();
             FeatureCollectionType value = (FeatureCollectionType)um.unmarshal(response);
-            
-/*            Object unmarshal = WFSMarshallerPool.getInstance().acquireUnmarshaller().unmarshal( response );
-
-            JAXBElement<FeatureCollectionType> fc = (JAXBElement<FeatureCollectionType>) unmarshal;
-            FeatureCollectionType value = fc.getValue();
-*/
 
             List<FeaturePropertyType> featureMember = value.getFeatureMember();
             for (FeaturePropertyType member : featureMember) {
