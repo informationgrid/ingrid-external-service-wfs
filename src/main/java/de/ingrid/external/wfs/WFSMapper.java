@@ -275,15 +275,37 @@ public class WFSMapper {
     /**
      * Get the name of the location from a search result.
      * @param f
-     * @return the name
+     * @return the name IN GERMAN (gn:sprache_ID = 1) or null
      */
     private String getNameFromFeature(Element f) {
         NodeList endonyms = f.getElementsByTagName( "gn:Endonym" );
         
-        // TODO: check for language!
-        Element item = (Element) endonyms.item( 0 );
-        return item.getElementsByTagName( "gn:name" ).item( 0 ).getTextContent();
+        int length = endonyms.getLength();
+        for (int i = 0; i < length; i++) {
+            Element item = (Element) endonyms.item( i );
+            
+            // check Sprache
+            boolean found = false;
+            NodeList spracheIds = item.getElementsByTagName("gn:sprache_ID");
+            String spracheId = null;
+            if (spracheIds.getLength() > 0) {
+                spracheId = spracheIds.item( 0 ).getTextContent();                
+            }
+            if (spracheId != null) {
+                if ("1".equals( spracheId )) {
+                    found = true;
+                }
+            } else {
+                // if gn:Endonym without gn:sprache_ID we take this one
+                found = true;
+            }
+
+            if (found) {
+                return item.getElementsByTagName( "gn:name" ).item( 0 ).getTextContent();
+            }
+        }
         
+        return null;
     }
 
 }

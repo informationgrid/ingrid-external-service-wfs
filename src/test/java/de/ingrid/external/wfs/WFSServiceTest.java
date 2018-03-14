@@ -74,7 +74,11 @@ public class WFSServiceTest {
         result = service.findLocationsFromQueryTerm( "Berlin", null, MatchingType.EXACT, null );
         assertThat( result, is( not( nullValue() ) ));
         assertThat( result.length, greaterThan( 2 ));
-        
+
+        result = service.findLocationsFromQueryTerm( "Niedersachsen*", null, MatchingType.EXACT, null );
+        assertThat( result, is( not( nullValue() ) ));
+        assertThat( result.length, is (1));
+        assertThat( result[0].getName(), is ("Niedersachsen"));
     }
     
     @Test
