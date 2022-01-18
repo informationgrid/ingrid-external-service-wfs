@@ -2,7 +2,7 @@
  * **************************************************-
  * InGrid external-service-wfs
  * ==================================================
- * Copyright (C) 2014 - 2018 wemove digital solutions GmbH
+ * Copyright (C) 2014 - 2022 wemove digital solutions GmbH
  * ==================================================
  * Licensed under the EUPL, Version 1.1 or – as soon they will be
  * approved by the European Commission - subsequent versions of the
@@ -59,7 +59,7 @@ public class WFSService implements GazetteerService {
     public Location getLocation(String locationId, Locale locale) {
         InputStream response = wfsClient.getLocation(locationId, locale);
         Location[] locations = wfsMapper.mapReponseToLocations( response );
-        return locations.length > 0 ? locations[0] : null;
+        return (locations != null && locations.length > 0) ? locations[0] : null;
     }
 
     @Override
