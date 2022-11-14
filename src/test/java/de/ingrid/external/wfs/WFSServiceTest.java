@@ -49,7 +49,7 @@ public class WFSServiceTest {
     // https://svn.kenai.com/svn/envision~portal/common/discovery-csw/src/test/java/at/sti2/envision/discovery/geotoolkit/GeoToolkitTest_v110.java
 
     @Test
-    void findLocation() throws Exception {
+    void findLocation() {
 
         Location[] result = service.findLocationsFromQueryTerm("Berlin", null, null, null);
 
