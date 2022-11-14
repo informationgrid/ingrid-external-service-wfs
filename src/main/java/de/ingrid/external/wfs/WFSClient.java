@@ -37,7 +37,8 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.geotoolkit.ogc.xml.v110.AndType;
 import org.geotoolkit.ogc.xml.v110.FilterType;
 import org.geotoolkit.ogc.xml.v110.LiteralType;
@@ -54,7 +55,7 @@ import de.ingrid.external.GazetteerService.MatchingType;
 
 public class WFSClient {
     
-    private Logger log = Logger.getLogger( WFSClient.class );
+    private Logger log = LogManager.getLogger( WFSClient.class );
 
     private static final String PROPERTY_ID = "gn:nnid";
     private static final String PROPERTY_NAME = "gn:hatEndonym/gn:Endonym/gn:name";
