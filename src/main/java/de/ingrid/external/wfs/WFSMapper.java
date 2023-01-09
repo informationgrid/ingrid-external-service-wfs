@@ -34,7 +34,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.geotoolkit.gml.xml.v311.FeaturePropertyType;
 import org.geotoolkit.wfs.xml.v110.FeatureCollectionType;
 import org.w3c.dom.Element;
@@ -50,7 +51,7 @@ import de.ingrid.external.om.impl.LocationImpl;
  */
 public class WFSMapper {
     
-    private Logger log = Logger.getLogger( WFSMapper.class ); 
+    private Logger log = LogManager.getLogger( WFSMapper.class ); 
     
     private ResourceBundle bundle;
 
@@ -220,7 +221,7 @@ public class WFSMapper {
             try {
                 tName = bundle.getString( "gazetteer.de." + realTypeId );
             } catch (MissingResourceException e) {
-                log.warn( "Type name of location not found in ResourceBundle ... id=" + realTypeId );
+                log.warn("Type name of location not found in ResourceBundle ... id={}", realTypeId);
                 tName = getTypeNameFromFeature( item );
             }
             String[] typeInfo = new String[] { tId, tName };

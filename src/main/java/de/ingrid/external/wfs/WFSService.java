@@ -26,14 +26,15 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.ingrid.external.GazetteerService;
 import de.ingrid.external.om.Location;
 
 public class WFSService implements GazetteerService {
     
-    private Logger log = Logger.getLogger( WFSService.class );
+    private Logger log = LogManager.getLogger( WFSService.class );
     
     WFSClient wfsClient;
     WFSMapper wfsMapper;
