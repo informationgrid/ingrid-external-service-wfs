@@ -2,7 +2,7 @@
  * **************************************************-
  * InGrid external-service-wfs
  * ==================================================
- * Copyright (C) 2014 - 2022 wemove digital solutions GmbH
+ * Copyright (C) 2014 - 2023 wemove digital solutions GmbH
  * ==================================================
  * Licensed under the EUPL, Version 1.1 or – as soon they will be
  * approved by the European Commission - subsequent versions of the
@@ -26,14 +26,15 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.ingrid.external.GazetteerService;
 import de.ingrid.external.om.Location;
 
 public class WFSService implements GazetteerService {
     
-    private Logger log = Logger.getLogger( WFSService.class );
+    private Logger log = LogManager.getLogger( WFSService.class );
     
     WFSClient wfsClient;
     WFSMapper wfsMapper;
