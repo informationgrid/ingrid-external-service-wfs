@@ -257,7 +257,7 @@ public class WFSMapper {
      */
     private String getNativeKeyFromFeature(Element f) {
         // TODO: add switch for RS-key configured by property
-        NodeList ags = f.getElementsByTagName( "gn:ags" );
+        NodeList ags = f.getElementsByTagName( "gn:ars" );
         if (ags.getLength() > 0) {
             return ags.item( 0 ).getTextContent();
         }
