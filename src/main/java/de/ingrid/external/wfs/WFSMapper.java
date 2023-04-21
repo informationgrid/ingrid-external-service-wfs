@@ -77,19 +77,24 @@ public class WFSMapper {
 
             List<FeaturePropertyType> featureMember = value.getFeatureMember();
             for (FeaturePropertyType member : featureMember) {
-                Location loc = new LocationImpl();
-                Element f = (Element) member.getUnknowFeature();
-                loc.setId( getIdFromFeature( f ) );
-                loc.setName( getNameFromFeature( f ) );
-                float[] bbox = getBBoxFromFeature( f );
-                loc.setBoundingBox( bbox[0], bbox[1], bbox[2],bbox[3] );
-                // NOT SUPPORTED: loc.setIsExpired( arg0 );
-                loc.setNativeKey( getNativeKeyFromFeature( f ) );
-//                loc.setQualifier( arg0 );
-                // get the type name from the ID through localization instead of possible value in document
-                setTypeFromFeature( loc, f, typeMap );
-                
-                locations.add( loc );
+                try {
+                    Location loc = new LocationImpl();
+                    Element f = (Element) member.getUnknowFeature();
+                    loc.setId( getIdFromFeature( f ) );
+                    loc.setName( getNameFromFeature( f ) );
+                    float[] bbox = getBBoxFromFeature( f );
+                    loc.setBoundingBox( bbox[0], bbox[1], bbox[2],bbox[3] );
+                    // NOT SUPPORTED: loc.setIsExpired( arg0 );
+                    loc.setNativeKey( getNativeKeyFromFeature( f ) );
+                    //                loc.setQualifier( arg0 );
+                    // get the type name from the ID through localization instead of possible value in document
+                    setTypeFromFeature( loc, f, typeMap );
+
+                    locations.add( loc );
+                }
+                catch (Exception e) {
+                    log.warn( "Couldn't map featureMember to location", e );
+                }
             }
             
             // check for typeIds that are references and resolve those correctly

@@ -1,0 +1,62 @@
+POST http://sg.geodatenzentrum.de/wfs_gnde
+Content-Type: application/xml
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wfs:GetFeature resultType="results" traverseXlinkDepth="*" service="WFS" version="1.1.0" xmlns:gmi="http://www.isotc211.org/2005/gmi" xmlns:wfs="http://www.opengis.net/wfs"
+                xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:ows="http://www.opengis.net/ows" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ins="http://www.inspire.org" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:fes="http://www.opengis.net/fes/2.0"
+                xmlns:ns10="http://www.opengis.net/gml" xmlns:ns15="http://www.opengis.net/ows/1.1" xmlns:ns14="http://www.opengis.net/wfs/2.0" xmlns:gmd="http://www.isotc211.org/2005/gmd"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+    <wfs:Query typeName="gn:GnObjekt" featureVersion="1.1.0" xmlns:gn="http://www.geodatenzentrum.de/gnde">
+        <ogc:Filter>
+            <ogc:And>
+                <ogc:PropertyIsLike escapeChar="\" matchCase="false" singleChar="?" wildCard="*">
+                    <ogc:PropertyName>gn:hatEndonym/gn:Endonym/gn:name</ogc:PropertyName>
+                    <ogc:Literal>*Hannover*</ogc:Literal>
+                </ogc:PropertyIsLike>
+                <ogc:Or>
+                    <ogc:PropertyIsEqualTo matchCase="true">
+                        <ogc:PropertyName>gn:hatObjektart/gn:Objektart/gn:objektart</ogc:PropertyName>
+                        <ogc:Literal>AX_Gemeinde</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo matchCase="true">
+                        <ogc:PropertyName>gn:hatObjektart/gn:Objektart/gn:objektart</ogc:PropertyName>
+                        <ogc:Literal>AX_Bundesland</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo matchCase="true">
+                        <ogc:PropertyName>gn:hatObjektart/gn:Objektart/gn:objektart</ogc:PropertyName>
+                        <ogc:Literal>AX_Regierungsbezirk</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo matchCase="true">
+                        <ogc:PropertyName>gn:hatObjektart/gn:Objektart/gn:objektart</ogc:PropertyName>
+                        <ogc:Literal>AX_KreisRegion</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo matchCase="true">
+                        <ogc:PropertyName>gn:hatObjektart/gn:Objektart/gn:objektart</ogc:PropertyName>
+                        <ogc:Literal>AX_Nationalstaat</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo matchCase="true">
+                        <ogc:PropertyName>gn:hatObjektart/gn:Objektart/gn:objektart</ogc:PropertyName>
+                        <ogc:Literal>AX_Landschaft</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo matchCase="true">
+                        <ogc:PropertyName>gn:hatObjektart/gn:Objektart/gn:objektart</ogc:PropertyName>
+                        <ogc:Literal>AX_StehendesGewaesser</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo matchCase="true">
+                        <ogc:PropertyName>gn:hatObjektart/gn:Objektart/gn:objektart</ogc:PropertyName>
+                        <ogc:Literal>AX_Meer</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo matchCase="true">
+                        <ogc:PropertyName>gn:hatObjektart/gn:Objektart/gn:objektart</ogc:PropertyName>
+                        <ogc:Literal>AX_Insel</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo matchCase="true">
+                        <ogc:PropertyName>gn:hatObjektart/gn:Objektart/gn:objektart</ogc:PropertyName>
+                        <ogc:Literal>AX_SchutzgebietNachNaturUmweltOderBodenschutzrecht</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                </ogc:Or>
+            </ogc:And>
+        </ogc:Filter>
+    </wfs:Query>
+</wfs:GetFeature>

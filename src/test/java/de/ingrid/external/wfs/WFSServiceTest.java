@@ -23,6 +23,7 @@
 package de.ingrid.external.wfs;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.StringStartsWith.startsWith;
@@ -94,6 +95,23 @@ public class WFSServiceTest {
         assertThat(location.getNativeKey(), is("11"));
         assertThat(location.getTypeId(), is("use2Type"));
         assertThat(location.getTypeName(), is("Bundesland"));
+    }
+
+    @Test
+    void testMapping() {
+        // check if mapping is not interrupted by single incorrect featureMember
+        Location[] result = service.findLocationsFromQueryTerm("*Hannover*", null, null, null);
+
+        assertThat(result, is(not(nullValue())));
+        assertThat(result.length, equalTo(2));
+        for (Location location : result) {
+            assertThat(location.getBoundingBox(), is(not(nullValue())));
+            assertThat(location.getId(), is(not(nullValue())));
+            assertThat(location.getName(), is(not(nullValue())));
+            assertThat(location.getTypeId(), is(not(nullValue())));
+            assertThat(location.getTypeName(), is(not(nullValue())));
+
+        }
     }
     
 
