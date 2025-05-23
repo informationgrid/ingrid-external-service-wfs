@@ -8,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>ingrid-external-service-wfs</artifactId>
   <packaging>jar</packaging>
-  <version>7.5.2</version>
+  <version>7.5.3-SNAPSHOT</version>
   <name>InGrid external-service-wfs</name>
   <scm>
     <connection>scm:git:git@github.com:informationgrid/ingrid-external-service-wfs.git</connection>
