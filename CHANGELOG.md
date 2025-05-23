@@ -1,4 +1,11 @@
 
+## 7.5.2 (23.05.2025)
+
+
+### Bugfixes
+
+* Ortsuche funktioniert nicht (#7616)
+    
 ## 7.0.0 (05.01.2024)
 
 ### Features
